@@ -14,7 +14,7 @@ type Props = {
 };
 
 const inputClass =
-  'block w-full min-w-0 max-w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100';
+  'block w-full min-w-0 max-w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100';
 
 function getDatePart(value: string) {
   return value.split('T')[0] || '';
@@ -66,7 +66,7 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
 
   return (
     <form
-      className="grid gap-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.06)]"
+      className="grid min-w-0 gap-5 overflow-hidden rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.06)]"
       onSubmit={handleSubmit}
     >
       <div className="grid gap-2">
@@ -80,7 +80,7 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
         />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-5 lg:grid-cols-2">
         <div className="grid gap-2">
           <label className="text-sm font-semibold text-slate-700">Direction</label>
           <select
@@ -112,10 +112,10 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid min-w-0 gap-5 lg:grid-cols-2">
         <div className="grid min-w-0 gap-3">
           <label className="text-sm font-semibold text-slate-700">Departure time</label>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid min-w-0 gap-3 min-[480px]:grid-cols-2">
             <input
               className={inputClass}
               type="date"
@@ -137,7 +137,7 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
 
         <div className="grid min-w-0 gap-3">
           <label className="text-sm font-semibold text-slate-700">Arrival time</label>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid min-w-0 gap-3 min-[480px]:grid-cols-2">
             <input
               className={inputClass}
               type="date"

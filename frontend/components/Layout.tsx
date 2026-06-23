@@ -42,7 +42,7 @@ export default function Layout({ children, user }: Props) {
           </div>
         </nav>
       </header>
-      <main>{children}</main>
+      <main className="min-w-0">{children}</main>
     </div>
   );
 }

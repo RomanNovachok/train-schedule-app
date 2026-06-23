@@ -22,10 +22,10 @@ export default function Home() {
 
   return (
     <Layout user={user}>
-      <div className="grid gap-5 lg:gap-6">
+      <div className="grid min-w-0 gap-5 lg:gap-6">
         {user && (
           <section
-            className="rounded-[20px] border border-slate-200 bg-white px-5 py-5 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:px-6"
+            className="min-w-0 rounded-[20px] border border-slate-200 bg-white px-5 py-5 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:px-6"
             aria-labelledby="manage-trains-heading"
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -69,7 +69,7 @@ export default function Home() {
 
         {!user && (
           <section
-            className="rounded-[20px] border border-slate-200 bg-white px-5 py-4 text-sm leading-6 text-slate-700 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:px-6"
+            className="min-w-0 rounded-[20px] border border-slate-200 bg-white px-5 py-4 text-sm leading-6 text-slate-700 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:px-6"
             aria-label="Authentication status"
           >
             Log in to add or edit train records. Only admins can delete records.
@@ -77,7 +77,7 @@ export default function Home() {
         )}
 
         {isFormOpen && (
-          <section aria-labelledby="train-form-heading">
+          <section className="min-w-0" aria-labelledby="train-form-heading">
             <h2 id="train-form-heading" className="sr-only">
               {editing ? 'Edit train' : 'Add train'}
             </h2>
@@ -101,7 +101,7 @@ export default function Home() {
         )}
 
         <section
-          className="rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:p-6"
+          className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:p-6"
           aria-labelledby="train-schedule-heading"
         >
           <header className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
