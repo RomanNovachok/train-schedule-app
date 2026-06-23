@@ -14,7 +14,8 @@ type Props = {
 };
 
 const inputClass =
-  'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100';
+  'block w-full min-w-0 max-w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100';
+const dateTimeInputClass = `${inputClass} ios-datetime-input text-base`;
 
 export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
   const [form, setForm] = useState<TrainInput>(buildTrainFormState(initial));
@@ -94,20 +95,20 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
-        <div className="grid gap-2">
+        <div className="grid min-w-0 gap-2">
           <label className="text-sm font-semibold text-slate-700">Departure time</label>
           <input
-            className={inputClass}
+            className={dateTimeInputClass}
             type="datetime-local"
             value={form.departureTime}
             onChange={(e) => handleChange('departureTime', e.target.value)}
           />
         </div>
 
-        <div className="grid gap-2">
+        <div className="grid min-w-0 gap-2">
           <label className="text-sm font-semibold text-slate-700">Arrival time</label>
           <input
-            className={inputClass}
+            className={dateTimeInputClass}
             type="datetime-local"
             value={form.arrivalTime}
             onChange={(e) => handleChange('arrivalTime', e.target.value)}
