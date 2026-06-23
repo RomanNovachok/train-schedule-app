@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import type { TrainInput } from '../lib/api';
-import { toDateTimeLocal } from '../utils/date';
-import { prepareTrainFormSubmission } from '../utils/train-form';
+import {
+  buildTrainFormState,
+  prepareTrainFormSubmission,
+  TRAIN_DIRECTIONS,
+  TRAIN_STATIONS,
+} from '../utils/train-form';
 
 type Props = {
   initial?: Partial<TrainInput>;
@@ -9,17 +13,8 @@ type Props = {
   onSubmit: (data: TrainInput) => void;
 };
 
-const directions = ['Northbound', 'Southbound'];
-const stations = ['Central Station', 'East Station'];
-
 export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
-  const [form, setForm] = useState<TrainInput>({
-    trainNumber: initial.trainNumber ?? '',
-    direction: initial.direction ?? directions[0],
-    station: initial.station ?? stations[0],
-    departureTime: initial.departureTime ? toDateTimeLocal(initial.departureTime) : '',
-    arrivalTime: initial.arrivalTime ? toDateTimeLocal(initial.arrivalTime) : '',
-  });
+  const [form, setForm] = useState<TrainInput>(buildTrainFormState(initial));
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (field: keyof TrainInput, value: string) => {
@@ -63,7 +58,7 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
       <div className="field">
         <label className="label">Direction</label>
         <select className="select" value={form.direction} onChange={(e) => handleChange('direction', e.target.value)}>
-          {directions.map((value) => (
+          {TRAIN_DIRECTIONS.map((value) => (
             <option key={value} value={value}>
               {value}
             </option>
@@ -74,7 +69,7 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
       <div className="field">
         <label className="label">Station</label>
         <select className="select" value={form.station} onChange={(e) => handleChange('station', e.target.value)}>
-          {stations.map((value) => (
+          {TRAIN_STATIONS.map((value) => (
             <option key={value} value={value}>
               {value}
             </option>

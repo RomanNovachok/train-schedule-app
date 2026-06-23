@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../common/prisma.service';
 import { CreateTrainDto } from './dto/create-train.dto';
@@ -50,10 +50,6 @@ export class TrainsService {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           if (error.code === 'P2025') {
             throw new NotFoundException(`Train with id ${id} not found`);
-          }
-
-          if (error.code === 'P2002') {
-            throw new ConflictException('Train number already exists');
           }
         }
 

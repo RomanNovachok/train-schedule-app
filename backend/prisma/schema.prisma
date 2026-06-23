@@ -23,7 +23,7 @@ model User {
 
 model Train {
   id            Int      @id @default(autoincrement())
-  trainNumber   String   @unique
+  trainNumber   String
   direction     String
   station       String
   departureTime DateTime

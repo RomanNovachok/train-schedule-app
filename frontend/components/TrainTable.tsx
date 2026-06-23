@@ -1,6 +1,7 @@
 import { Train } from '../lib/api';
 import { UserInfo } from '../lib/auth';
 import { UserRoles } from '../lib/user-roles';
+import { formatTrainDateTime } from '../utils/date';
 
 type Props = {
   trains: Train[];
@@ -31,8 +32,8 @@ export default function TrainTable({ trains, user, onEdit, onDelete }: Props) {
               <td data-label="Train #">{train.trainNumber}</td>
               <td data-label="Direction">{train.direction}</td>
               <td data-label="Station">{train.station}</td>
-              <td data-label="Departure">{new Date(train.departureTime).toLocaleString()}</td>
-              <td data-label="Arrival">{new Date(train.arrivalTime).toLocaleString()}</td>
+              <td data-label="Departure">{formatTrainDateTime(train.departureTime)}</td>
+              <td data-label="Arrival">{formatTrainDateTime(train.arrivalTime)}</td>
               <td data-label="Actions">
                 {user ? (
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

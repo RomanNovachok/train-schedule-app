@@ -1,5 +1,8 @@
 import type { TrainInput } from '../lib/api';
-import { toSqlDateTime } from './date';
+import { compareDateTimeValues, toDateTimeLocal, toSqlDateTime } from './date';
+
+export const TRAIN_DIRECTIONS = ['Northbound', 'Southbound'] as const;
+export const TRAIN_STATIONS = ['Central Station', 'East Station'] as const;
 
 type TrainFormPreparationResult =
   | { ok: false; error: string }
@@ -18,7 +21,7 @@ export function prepareTrainFormSubmission(form: TrainInput): TrainFormPreparati
     return { ok: false, error: 'Departure and arrival times are required' };
   }
 
-  if (new Date(form.arrivalTime) < new Date(form.departureTime)) {
+  if (compareDateTimeValues(form.arrivalTime, form.departureTime) < 0) {
     return { ok: false, error: 'Arrival time must be same or after departure time' };
   }
 
@@ -36,6 +39,16 @@ export function prepareTrainFormSubmission(form: TrainInput): TrainFormPreparati
       departureTime,
       arrivalTime,
     },
+  };
+}
+
+export function buildTrainFormState(initial: Partial<TrainInput> = {}): TrainInput {
+  return {
+    trainNumber: initial.trainNumber ?? '',
+    direction: initial.direction ?? TRAIN_DIRECTIONS[0],
+    station: initial.station ?? TRAIN_STATIONS[0],
+    departureTime: initial.departureTime ? toDateTimeLocal(initial.departureTime) : '',
+    arrivalTime: initial.arrivalTime ? toDateTimeLocal(initial.arrivalTime) : '',
   };
 }
 

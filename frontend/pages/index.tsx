@@ -51,6 +51,7 @@ export default function Home() {
               {editing ? 'Edit train' : 'Add train'}
             </h2>
             <TrainForm
+              key={editing ? `edit-${editing.id}` : 'create'}
               initial={
                 editing
                   ? {
