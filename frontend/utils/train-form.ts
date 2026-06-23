@@ -21,15 +21,15 @@ export function prepareTrainFormSubmission(form: TrainInput): TrainFormPreparati
     return { ok: false, error: 'Departure and arrival times are required' };
   }
 
-  if (compareDateTimeValues(form.arrivalTime, form.departureTime) < 0) {
-    return { ok: false, error: 'Arrival time must be same or after departure time' };
-  }
-
   const departureTime = toSqlDateTime(form.departureTime);
   const arrivalTime = toSqlDateTime(form.arrivalTime);
 
   if (!departureTime || !arrivalTime) {
     return { ok: false, error: 'Departure and arrival times must be valid dates.' };
+  }
+
+  if (compareDateTimeValues(arrivalTime, departureTime) < 0) {
+    return { ok: false, error: 'Arrival time must be same or after departure time' };
   }
 
   return {

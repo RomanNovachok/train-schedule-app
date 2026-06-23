@@ -15,7 +15,25 @@ type Props = {
 
 const inputClass =
   'block w-full min-w-0 max-w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100';
-const dateTimeInputClass = `${inputClass} ios-datetime-input text-base`;
+
+function getDatePart(value: string) {
+  return value.split('T')[0] || '';
+}
+
+function getTimePart(value: string) {
+  return value.split('T')[1] || '';
+}
+
+function updateDateTimeValue(currentValue: string, field: 'date' | 'time', nextValue: string) {
+  const date = field === 'date' ? nextValue : getDatePart(currentValue);
+  const time = field === 'time' ? nextValue : getTimePart(currentValue);
+
+  if (!date && !time) {
+    return '';
+  }
+
+  return `${date}T${time}`;
+}
 
 export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
   const [form, setForm] = useState<TrainInput>(buildTrainFormState(initial));
@@ -62,7 +80,7 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
         />
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         <div className="grid gap-2">
           <label className="text-sm font-semibold text-slate-700">Direction</label>
           <select
@@ -94,25 +112,49 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
         </div>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2">
-        <div className="grid min-w-0 gap-2">
+      <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid min-w-0 gap-3">
           <label className="text-sm font-semibold text-slate-700">Departure time</label>
-          <input
-            className={dateTimeInputClass}
-            type="datetime-local"
-            value={form.departureTime}
-            onChange={(e) => handleChange('departureTime', e.target.value)}
-          />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <input
+              className={inputClass}
+              type="date"
+              value={getDatePart(form.departureTime)}
+              onChange={(e) =>
+                handleChange('departureTime', updateDateTimeValue(form.departureTime, 'date', e.target.value))
+              }
+            />
+            <input
+              className={inputClass}
+              type="time"
+              value={getTimePart(form.departureTime)}
+              onChange={(e) =>
+                handleChange('departureTime', updateDateTimeValue(form.departureTime, 'time', e.target.value))
+              }
+            />
+          </div>
         </div>
 
-        <div className="grid min-w-0 gap-2">
+        <div className="grid min-w-0 gap-3">
           <label className="text-sm font-semibold text-slate-700">Arrival time</label>
-          <input
-            className={dateTimeInputClass}
-            type="datetime-local"
-            value={form.arrivalTime}
-            onChange={(e) => handleChange('arrivalTime', e.target.value)}
-          />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <input
+              className={inputClass}
+              type="date"
+              value={getDatePart(form.arrivalTime)}
+              onChange={(e) =>
+                handleChange('arrivalTime', updateDateTimeValue(form.arrivalTime, 'date', e.target.value))
+              }
+            />
+            <input
+              className={inputClass}
+              type="time"
+              value={getTimePart(form.arrivalTime)}
+              onChange={(e) =>
+                handleChange('arrivalTime', updateDateTimeValue(form.arrivalTime, 'time', e.target.value))
+              }
+            />
+          </div>
         </div>
       </div>
 

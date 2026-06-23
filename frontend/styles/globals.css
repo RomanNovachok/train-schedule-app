@@ -24,35 +24,4 @@
   select {
     font: inherit;
   }
-
-  input[type="datetime-local"] {
-    min-width: 0;
-    max-width: 100%;
-  }
-}
-
-@layer utilities {
-  .ios-datetime-input {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .ios-datetime-input::-webkit-date-and-time-value {
-    text-align: left;
-    min-width: 0;
-  }
-
-  .ios-datetime-input::-webkit-datetime-edit {
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  .ios-datetime-input::-webkit-datetime-edit-fields-wrapper {
-    min-width: 0;
-  }
-
-  .ios-datetime-input::-webkit-calendar-picker-indicator {
-    margin: 0;
-    flex-shrink: 0;
-  }
 }
