@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function TrainTable({ trains, user, onEdit, onDelete }: Props) {
-  const isAdmin = user?.role === UserRoles.Admin;
+  const canDelete = user?.role === UserRoles.Admin;
 
   return (
     <div className="table-wrapper">
@@ -39,7 +39,7 @@ export default function TrainTable({ trains, user, onEdit, onDelete }: Props) {
                     <button className="button secondary" onClick={() => onEdit(train)}>
                       Edit
                     </button>
-                    {isAdmin && (
+                    {canDelete && (
                       <button className="button" onClick={() => onDelete(train.id)}>
                         Delete
                       </button>

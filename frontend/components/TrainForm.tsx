@@ -1,57 +1,13 @@
-import { FormEvent, useState } from 'react';
-import { TrainInput } from '../lib/api';
+import { useState } from 'react';
+import type { TrainInput } from '../lib/api';
+import { toDateTimeLocal } from '../utils/date';
+import { prepareTrainFormSubmission } from '../utils/train-form';
 
 type Props = {
   initial?: Partial<TrainInput>;
   onCancel: () => void;
   onSubmit: (data: TrainInput) => void;
 };
-
-function toDateTimeLocal(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return '';
-  }
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-}
-
-function formatSqlDate(value: Date) {
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, '0');
-  const day = String(value.getDate()).padStart(2, '0');
-  const hours = String(value.getHours()).padStart(2, '0');
-  const minutes = String(value.getMinutes()).padStart(2, '0');
-  const seconds = String(value.getSeconds()).padStart(2, '0');
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
-function toSqlDateTime(value: string) {
-  if (!value) {
-    return '';
-  }
-
-  const dateTimeLocal = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
-  const dateTimeLocalSeconds = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
-
-  if (dateTimeLocalSeconds.test(value)) {
-    return value.replace('T', ' ');
-  }
-  if (dateTimeLocal.test(value)) {
-    return `${value.replace('T', ' ')}:00`;
-  }
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return '';
-  }
-
-  return formatSqlDate(date);
-}
 
 const directions = ['Northbound', 'Southbound'];
 const stations = ['Central Station', 'East Station'];
@@ -72,37 +28,23 @@ export default function TrainForm({ initial = {}, onCancel, onSubmit }: Props) {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!form.trainNumber.trim()) {
-      setError('Train number is required');
+    const result = prepareTrainFormSubmission(form);
+
+    if (!result.ok) {
+      if (result.error === 'Departure and arrival times must be valid dates.') {
+        console.error('TrainForm invalid time values', {
+          departureTime: form.departureTime,
+          arrivalTime: form.arrivalTime,
+        });
+      }
+
+      setError(result.error);
       return;
     }
-    if (form.trainNumber.trim().length > 50) {
-      setError('Train number must be at most 50 characters.');
-      return;
-    }
-    if (!form.departureTime || !form.arrivalTime) {
-      setError('Departure and arrival times are required');
-      return;
-    }
-    if (new Date(form.arrivalTime) < new Date(form.departureTime)) {
-      setError('Arrival time must be same or after departure time');
-      return;
-    }
-    const departureTime = toSqlDateTime(form.departureTime);
-    const arrivalTime = toSqlDateTime(form.arrivalTime);
-    if (!departureTime || !arrivalTime) {
-      console.error('TrainForm invalid time values', { departureTime: form.departureTime, arrivalTime: form.arrivalTime });
-      setError('Departure and arrival times must be valid dates.');
-      return;
-    }
-    const payload: TrainInput = {
-      ...form,
-      departureTime,
-      arrivalTime,
-    };
-    console.log('TrainForm submit payload', payload);
+
+    console.log('TrainForm submit payload', result.payload);
     setError(null);
-    onSubmit(payload);
+    onSubmit(result.payload);
   };
 
   return (
