@@ -13,6 +13,7 @@ function normalizeOrigin(origin: string) {
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 3333;
 
   const allowedOrigins = [
     'http://localhost:3000',
@@ -42,12 +43,20 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+  const swaggerServerUrl = normalizeOrigin(
+    process.env.RENDER_EXTERNAL_URL ||
+      process.env.BACKEND_URL ||
+      `http://localhost:${port}`,
+  );
+  const swaggerServerLabel = swaggerServerUrl.includes('onrender.com')
+    ? 'Render production'
+    : 'Local development';
+
   const config = new DocumentBuilder()
     .setTitle('Train Schedule API')
     .setDescription('API for train schedule management with JWT authentication')
     .setVersion('1.0')
-    .addServer(`http://localhost:${process.env.PORT || 3333}`, 'Local development')
-    .addServer('https://train-schedule-app-7yzy.onrender.com', 'Render production')
+    .addServer(swaggerServerUrl, swaggerServerLabel)
     .addBearerAuth()
     .build();
 
@@ -58,11 +67,10 @@ async function bootstrap() {
     },
   });
 
-  const port = process.env.PORT || 3333;
   await app.listen(port);
   logger.log(`Backend running on port ${port}`);
   logger.log(`Swagger UI available at http://localhost:${port}/api`);
-  logger.log('Swagger UI production: https://train-schedule-app-7yzy.onrender.com/api');
+  logger.log(`Swagger server target: ${swaggerServerUrl}`);
 }
 
 bootstrap();
