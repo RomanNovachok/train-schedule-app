@@ -50,7 +50,7 @@ A simple full-stack train schedule application built for a Full Stack internship
    npm run dev
    ```
 
-The backend runs on: [http://localhost:3333](http://localhost:3333/)
+The backend runs on: [https://train-schedule-app-7yzy.onrender.com](https://train-schedule-app-7yzy.onrender.com)
 
 ### Frontend setup
 
@@ -80,7 +80,7 @@ The backend runs on: [http://localhost:3333](http://localhost:3333/)
    npm run dev
    ```
 
-The frontend runs on: [http://localhost:3000](http://localhost:3000/)
+The frontend runs on: [https://train-schedule-app-omega.vercel.app/](https://train-schedule-app-omega.vercel.app/)
 
 ## Test Credentials
 
@@ -133,8 +133,8 @@ Protected routes require `Authorization: Bearer <token>`.
 - Backend: Render
 - Database: Neon PostgreSQL
 
-Frontend URL: TODO
-Backend URL: TODO
+Frontend URL: https://train-schedule-app-omega.vercel.app/
+Backend URL: https://train-schedule-app-7yzy.onrender.com
 
 ## Notes
 
