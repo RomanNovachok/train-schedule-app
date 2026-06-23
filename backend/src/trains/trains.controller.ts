@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, BadRequestException, Logger } from '@nestjs/common';
 import { TrainsService } from './trains.service';
 import { CreateTrainDto } from './dto/create-train.dto';
 import { UpdateTrainDto } from './dto/update-train.dto';
@@ -8,6 +8,8 @@ import { Roles } from '../common/roles.decorator';
 
 @Controller('trains')
 export class TrainsController {
+  private readonly logger = new Logger(TrainsController.name);
+
   constructor(private trainsService: TrainsService) {}
 
   @Get()
@@ -19,7 +21,7 @@ export class TrainsController {
   @Roles('USER', 'ADMIN')
   @Post()
   create(@Body() dto: CreateTrainDto) {
-    console.log('Backend create train body:', dto);
+    this.logger.debug(`Create train body: ${JSON.stringify(dto)}`);
     if (new Date(dto.arrivalTime) < new Date(dto.departureTime)) {
       throw new BadRequestException('Arrival time must be same or after departure time');
     }
@@ -34,7 +36,7 @@ export class TrainsController {
   @Roles('USER', 'ADMIN')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateTrainDto) {
-    console.log('Backend update train body:', dto);
+    this.logger.debug(`Update train body: ${JSON.stringify(dto)}`);
     if (dto.departureTime && dto.arrivalTime) {
       if (new Date(dto.arrivalTime) < new Date(dto.departureTime)) {
         throw new BadRequestException('Arrival time must be same or after departure time');

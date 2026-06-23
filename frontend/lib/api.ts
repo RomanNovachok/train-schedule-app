@@ -114,7 +114,6 @@ function normalizeTrainInput(data: TrainInput) {
 
 export async function createTrain(token: string, data: TrainInput) {
   const payload = normalizeTrainInput(data);
-  console.log('createTrain payload', payload);
   return request<Train>('/trains', {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
@@ -139,7 +138,6 @@ export async function updateTrain(token: string, id: number, data: Partial<Train
     ...(data.departureTime ? { departureTime: normalizeDate(data.departureTime) } : {}),
     ...(data.arrivalTime ? { arrivalTime: normalizeDate(data.arrivalTime) } : {}),
   };
-  console.log('updateTrain payload', normalized);
 
   return request<Train>(`/trains/${id}`, {
     method: 'PATCH',
