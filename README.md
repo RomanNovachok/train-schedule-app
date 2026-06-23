@@ -52,6 +52,8 @@ A simple full-stack train schedule application built for a Full Stack internship
 
 The backend runs on: [https://train-schedule-app-7yzy.onrender.com](https://train-schedule-app-7yzy.onrender.com)
 
+Swagger docs: [https://train-schedule-app-7yzy.onrender.com/api](https://train-schedule-app-7yzy.onrender.com/api)
+
 ### Frontend setup
 
 1. If you are still inside the backend folder, run:
@@ -121,6 +123,8 @@ The frontend runs on: [https://train-schedule-app-omega.vercel.app/](https://tra
 - `DELETE /trains/:id`
 
 Protected routes require `Authorization: Bearer <token>`.
+
+Interactive Swagger docs: [https://train-schedule-app-7yzy.onrender.com/api](https://train-schedule-app-7yzy.onrender.com/api)
 
 ## Project Structure
 
