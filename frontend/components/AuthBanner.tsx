@@ -19,15 +19,21 @@ export default function AuthBanner({ user, onLogout }: Props) {
     const message = messages[user.role] || guestMessage;
 
     return (
-      <section className="card header-row" style={{ alignItems: 'center' }} aria-label="Authentication status">
+      <section
+        className="flex flex-col gap-4 rounded-[28px] border border-slate-200 bg-white px-6 py-5 shadow-[0_20px_50px_rgba(15,23,42,0.06)] sm:flex-row sm:items-center sm:justify-between"
+        aria-label="Authentication status"
+      >
         <div>
-          <div>
-            Logged in as <strong>{user.email}</strong> ({user.role})
+          <div className="text-sm text-slate-600">
+            Logged in as <strong className="text-slate-950">{user.email}</strong> ({user.role})
           </div>
-          <div style={{ marginTop: 6 }}>{message}</div>
+          <div className="mt-2 text-sm leading-6 text-slate-700">{message}</div>
         </div>
         {onLogout && (
-          <button className="button secondary" onClick={onLogout}>
+          <button
+            className="inline-flex items-center justify-center rounded-2xl bg-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+            onClick={onLogout}
+          >
             Logout
           </button>
         )}
@@ -35,5 +41,12 @@ export default function AuthBanner({ user, onLogout }: Props) {
     );
   }
 
-  return <section className="card" aria-label="Authentication status">{guestMessage}</section>;
+  return (
+    <section
+      className="rounded-[28px] border border-slate-200 bg-white px-6 py-5 text-sm leading-6 text-slate-700 shadow-[0_20px_50px_rgba(15,23,42,0.06)]"
+      aria-label="Authentication status"
+    >
+      {guestMessage}
+    </section>
+  );
 }
