@@ -1,4 +1,5 @@
 import { UserInfo } from '../lib/auth';
+import { UserRoles } from '../lib/user-roles';
 
 type Props = {
   user: UserInfo | null;
@@ -11,10 +12,15 @@ export default function AuthBanner({ user, onLogout }: Props) {
   const adminMessage = 'Admin access: you can add, edit, and delete train records.';
 
   if (user) {
-    const message = user.role === 'ADMIN' ? adminMessage : user.role === 'USER' ? userMessage : guestMessage;
+    const message =
+      user.role === UserRoles.Admin
+        ? adminMessage
+        : user.role === UserRoles.User
+          ? userMessage
+          : guestMessage;
 
     return (
-      <div className="card header-row" style={{ alignItems: 'center' }}>
+      <section className="card header-row" style={{ alignItems: 'center' }} aria-label="Authentication status">
         <div>
           <div>
             Logged in as <strong>{user.email}</strong> ({user.role})
@@ -26,13 +32,9 @@ export default function AuthBanner({ user, onLogout }: Props) {
             Logout
           </button>
         )}
-      </div>
+      </section>
     );
   }
 
-  return (
-    <div className="card">
-      {guestMessage}
-    </div>
-  );
+  return <section className="card" aria-label="Authentication status">{guestMessage}</section>;
 }

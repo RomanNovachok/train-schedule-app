@@ -10,15 +10,24 @@ type Props = {
 export default function Layout({ children, user }: Props) {
   return (
     <div className="container">
-      <nav>
-        <div>
-          <strong>Train Schedule</strong>
-        </div>
-        <div>
-          {user ? <span>{user.email}</span> : <><Link href="/login">Login</Link><Link href="/register">Register</Link></>}
-        </div>
-      </nav>
-      {children}
+      <header className="site-header">
+        <nav aria-label="Primary navigation">
+          <div>
+            <strong>Train Schedule</strong>
+          </div>
+          <div>
+            {user ? (
+              <span>{user.email}</span>
+            ) : (
+              <>
+                <Link href="/login">Login</Link>
+                <Link href="/register">Register</Link>
+              </>
+            )}
+          </div>
+        </nav>
+      </header>
+      <main>{children}</main>
     </div>
   );
 }

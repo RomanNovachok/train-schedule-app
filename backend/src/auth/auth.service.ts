@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { UserRole } from '../common/user-roles';
 
 @Injectable()
 export class AuthService {
@@ -54,7 +55,7 @@ export class AuthService {
     return /[A-Za-z]/.test(password) && /\d/.test(password) && password.length >= 6;
   }
 
-  getAuthResponse(id: number, email: string, role: string) {
+  getAuthResponse(id: number, email: string, role: UserRole) {
     const payload = { sub: id, email, role };
     return {
       accessToken: this.jwtService.sign(payload),

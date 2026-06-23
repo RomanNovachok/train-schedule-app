@@ -1,3 +1,5 @@
+import { UserRole } from './user-roles';
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333';
 
 async function request<T>(path: string, options: RequestInit = {}) {
@@ -41,7 +43,7 @@ async function request<T>(path: string, options: RequestInit = {}) {
 
 export type AuthResponse = {
   accessToken: string;
-  user: { id: number; email: string; role: string };
+  user: { id: number; email: string; role: UserRole };
 };
 
 export type Train = {

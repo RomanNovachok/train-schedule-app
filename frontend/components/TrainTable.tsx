@@ -1,5 +1,6 @@
 import { Train } from '../lib/api';
 import { UserInfo } from '../lib/auth';
+import { UserRoles } from '../lib/user-roles';
 
 type Props = {
   trains: Train[];
@@ -9,7 +10,7 @@ type Props = {
 };
 
 export default function TrainTable({ trains, user, onEdit, onDelete }: Props) {
-  const isAdmin = user?.role === 'ADMIN';
+  const isAdmin = user?.role === UserRoles.Admin;
 
   return (
     <div className="table-wrapper">

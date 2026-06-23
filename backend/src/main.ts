@@ -37,7 +37,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3333;
   await app.listen(port);
   logger.log(`Backend running on port ${port}`);
-  logger.log(`Swagger UI available at http://localhost:${port}/api`);
+  logger.log(`Swagger UI available at http://localhost:${port}/api`, `https://train-schedule-app-7yzy.onrender.com/api`);
 }
 
 bootstrap();

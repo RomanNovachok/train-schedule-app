@@ -1,7 +1,9 @@
+import { UserRole } from './user-roles';
+
 export type UserInfo = {
   id: number;
   email: string;
-  role: string;
+  role: UserRole;
 };
 
 const tokenKey = 'train-schedule-token';

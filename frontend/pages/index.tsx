@@ -1,114 +1,40 @@
-import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import AuthBanner from '../components/AuthBanner';
 import TrainTable from '../components/TrainTable';
 import TrainForm from '../components/TrainForm';
-import { getToken, decodeUser, clearToken, UserInfo } from '../lib/auth';
-import { createTrain, deleteTrain, getTrains, Train, TrainInput, updateTrain } from '../lib/api';
+import { useHomePage } from '../hooks/useHomePage';
 
 export default function Home() {
-  const [trains, setTrains] = useState<Train[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<UserInfo | null>(null);
-  const [editing, setEditing] = useState<Train | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setUser(decodeUser(token));
-    }
-    fetchTrains();
-  }, []);
-
-  const fetchTrains = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await getTrains();
-      setTrains(data);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreate = async (data: TrainInput) => {
-    if (!user) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const token = getToken();
-      if (!token) throw new Error('Authentication token missing');
-      await createTrain(token, data);
-      setIsFormOpen(false);
-      fetchTrains();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpdate = async (data: TrainInput) => {
-    if (!user || !editing) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const token = getToken();
-      if (!token) throw new Error('Authentication token missing');
-      await updateTrain(token, editing.id, data);
-      setEditing(null);
-      setIsFormOpen(false);
-      fetchTrains();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    if (!user) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const token = getToken();
-      if (!token) throw new Error('Authentication token missing');
-      await deleteTrain(token, id);
-      fetchTrains();
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const openCreate = () => {
-    setEditing(null);
-    setIsFormOpen(true);
-  };
-
-  const openEdit = (train: Train) => {
-    setEditing(train);
-    setIsFormOpen(true);
-  };
-
-  const handleLogout = () => {
-    clearToken();
-    setUser(null);
-  };
+  const {
+    closeForm,
+    editing,
+    error,
+    handleCreate,
+    handleDelete,
+    handleLogout,
+    handleUpdate,
+    isFormOpen,
+    loading,
+    openCreate,
+    openEdit,
+    trains,
+    user,
+  } = useHomePage();
 
   return (
     <Layout user={user}>
-      <div className="grid" style={{ gap: 20 }}>
+      <div className="grid page-content">
+        <header className="page-header">
+          <h1>Train Schedule</h1>
+          <p>Browse the public schedule and manage train records based on your access level.</p>
+        </header>
+
         <AuthBanner user={user} onLogout={handleLogout} />
+
         {user && (
-          <div className="card header-row">
+          <section className="card header-row" aria-labelledby="manage-trains-heading">
             <div>
-              <strong>Manage train records</strong>
+              <h2 id="manage-trains-heading">Manage train records</h2>
               <p style={{ margin: 0 }}>Add and edit trains for the public schedule.</p>
             </div>
             <div>
@@ -116,36 +42,46 @@ export default function Home() {
                 Add train
               </button>
             </div>
-          </div>
-        )}
-        {isFormOpen && (
-          <TrainForm
-            initial={editing ? {
-              trainNumber: editing.trainNumber,
-              direction: editing.direction,
-              station: editing.station,
-              departureTime: editing.departureTime,
-              arrivalTime: editing.arrivalTime,
-            } : undefined}
-            onCancel={() => setIsFormOpen(false)}
-            onSubmit={editing ? handleUpdate : handleCreate}
-          />
+          </section>
         )}
 
-        <div className="card">
-          <div className="header-row">
+        {isFormOpen && (
+          <section aria-labelledby="train-form-heading">
+            <h2 id="train-form-heading" className="sr-only">
+              {editing ? 'Edit train' : 'Add train'}
+            </h2>
+            <TrainForm
+              initial={
+                editing
+                  ? {
+                      trainNumber: editing.trainNumber,
+                      direction: editing.direction,
+                      station: editing.station,
+                      departureTime: editing.departureTime,
+                      arrivalTime: editing.arrivalTime,
+                    }
+                  : undefined
+              }
+              onCancel={closeForm}
+              onSubmit={editing ? handleUpdate : handleCreate}
+            />
+          </section>
+        )}
+
+        <section className="card" aria-labelledby="train-schedule-heading">
+          <header className="header-row">
             <div>
-              <h2>Train schedule</h2>
+              <h2 id="train-schedule-heading">Train schedule</h2>
             </div>
-          </div>
-          {loading && <div>Loading schedule…</div>}
+          </header>
+          {loading && <p>Loading schedule...</p>}
           {error && (
-            <div className="error" style={{ whiteSpace: 'pre-line' }}>
+            <p className="error" style={{ whiteSpace: 'pre-line' }} role="alert">
               {error}
-            </div>
+            </p>
           )}
           <TrainTable trains={trains} user={user} onEdit={openEdit} onDelete={handleDelete} />
-        </div>
+        </section>
       </div>
     </Layout>
   );

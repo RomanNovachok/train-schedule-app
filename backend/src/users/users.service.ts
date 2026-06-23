@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
-import { Role } from '@prisma/client';
+import { UserRole, UserRoles } from '../common/user-roles';
 
 @Injectable()
 export class UsersService {
@@ -14,12 +14,12 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async create(data: { email: string; passwordHash: string; role?: Role }) {
+  async create(data: { email: string; passwordHash: string; role?: UserRole }) {
     return this.prisma.user.create({
       data: {
         email: data.email,
         passwordHash: data.passwordHash,
-        role: data.role ?? Role.USER,
+        role: data.role ?? UserRoles.User,
       },
     });
   }

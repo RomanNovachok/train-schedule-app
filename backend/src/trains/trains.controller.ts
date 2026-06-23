@@ -5,6 +5,7 @@ import { UpdateTrainDto } from './dto/update-train.dto';
 import { JwtAuthGuard } from '../common/jwt-auth.guard';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
+import { UserRoles } from '../common/user-roles';
 
 @Controller('trains')
 export class TrainsController {
@@ -18,7 +19,7 @@ export class TrainsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('USER', 'ADMIN')
+  @Roles(UserRoles.User, UserRoles.Admin)
   @Post()
   create(@Body() dto: CreateTrainDto) {
     this.logger.debug(`Create train body: ${JSON.stringify(dto)}`);
@@ -33,7 +34,7 @@ export class TrainsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('USER', 'ADMIN')
+  @Roles(UserRoles.User, UserRoles.Admin)
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateTrainDto) {
     this.logger.debug(`Update train body: ${JSON.stringify(dto)}`);
@@ -50,7 +51,7 @@ export class TrainsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
+  @Roles(UserRoles.Admin)
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.trainsService.delete(Number(id));
