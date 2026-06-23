@@ -14,8 +14,16 @@ export default function RegisterPage() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(true);
     setError(null);
+
+    if (!isValidPassword(password)) {
+      setError(
+        'Password must be at least 6 characters long and contain at least one letter and one number.',
+      );
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await register(email, password);
       storeToken(response.accessToken);
@@ -62,4 +70,8 @@ export default function RegisterPage() {
       </div>
     </Layout>
   );
+}
+
+function isValidPassword(password: string) {
+  return /[A-Za-z]/.test(password) && /\d/.test(password) && password.length >= 6;
 }

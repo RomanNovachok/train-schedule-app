@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -14,6 +14,12 @@ export class AuthService {
     const existing = await this.usersService.findByEmail(email);
     if (existing) {
       throw new UnauthorizedException('Email already in use');
+    }
+
+    if (!this.isValidPassword(password)) {
+      throw new BadRequestException(
+        'Password must be at least 6 characters long and contain at least one letter and one number.',
+      );
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -42,6 +48,10 @@ export class AuthService {
     }
 
     return this.getAuthResponse(user.id, user.email, user.role);
+  }
+
+  private isValidPassword(password: string) {
+    return /[A-Za-z]/.test(password) && /\d/.test(password) && password.length >= 6;
   }
 
   getAuthResponse(id: number, email: string, role: string) {
