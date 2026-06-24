@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Logger } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Logger, ParseIntPipe } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -47,9 +47,9 @@ export class TrainsController {
   @ApiParam({ name: 'id', example: 13, description: 'Train identifier' })
   @ApiOkResponse({ description: 'Train updated successfully' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTrainDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTrainDto) {
     this.logger.debug(`Update train body: ${JSON.stringify(dto)}`);
-    return this.trainsService.update(Number(id), dto);
+    return this.trainsService.update(id, dto);
   }
 
   @RoleProtected(UserRoles.Admin)
@@ -60,7 +60,7 @@ export class TrainsController {
   @ApiParam({ name: 'id', example: 13, description: 'Train identifier' })
   @ApiOkResponse({ description: 'Train deleted successfully' })
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.trainsService.delete(Number(id));
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.trainsService.delete(id);
   }
 }

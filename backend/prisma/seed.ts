@@ -53,11 +53,19 @@ async function main() {
   ];
 
   for (const train of sampleTrains) {
-    await prisma.train.upsert({
-      where: { trainNumber: train.trainNumber },
-      update: {},
-      create: train,
+    const existingTrain = await prisma.train.findFirst({
+      where: {
+        trainNumber: train.trainNumber,
+        direction: train.direction,
+        station: train.station,
+        departureTime: train.departureTime,
+        arrivalTime: train.arrivalTime,
+      },
     });
+
+    if (!existingTrain) {
+      await prisma.train.create({ data: train });
+    }
   }
 
   console.log('Seed completed.');

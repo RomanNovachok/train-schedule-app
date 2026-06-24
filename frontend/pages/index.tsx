@@ -2,6 +2,7 @@ import Layout from '../components/Layout';
 import TrainTable from '../components/TrainTable';
 import TrainForm from '../components/TrainForm';
 import { useHomePage } from '../hooks/useHomePage';
+import { UserRoles } from '../lib/user-roles';
 
 export default function Home() {
   const {
@@ -34,9 +35,10 @@ export default function Home() {
                   Logged in as <strong className="text-slate-950">{user.email}</strong> ({user.role})
                 </div>
                 <div className="mt-2 text-sm leading-6 text-slate-700">
-                  {user.role === 'ADMIN'
-                    ? 'Admin access: you can add, edit, and delete train records.'
-                    : 'You can add and edit train records. Delete access is available only for admins.'}
+                  {{
+                    [UserRoles.Admin]: 'Admin access: you can add, edit, and delete train records.',
+                    [UserRoles.User]: 'You can add and edit train records. Delete access is available only for admins.',
+                  }[user.role]}
                 </div>
               </div>
 

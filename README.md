@@ -89,6 +89,8 @@ The frontend runs on: [https://train-schedule-app-omega.vercel.app/](https://tra
 - Admin: `admin@mail.com` / `admin`
 - User: `user@mail.com` / `user`
 
+These are pre-seeded demo accounts created directly in the database for testing. The password validation rules apply to newly registered accounts.
+
 ## Features
 
 - Public train schedule view
@@ -111,7 +113,7 @@ The frontend runs on: [https://train-schedule-app-omega.vercel.app/](https://tra
 - Database: PostgreSQL
 - ORM: Prisma
 - Auth: JWT, bcrypt
-- Styling: CSS
+- Styling: Tailwind CSS
 
 ## API Overview
 
@@ -128,8 +130,8 @@ Interactive Swagger docs: [https://train-schedule-app-7yzy.onrender.com/api](htt
 
 ## Project Structure
 
-- `backend/` — NestJS API
-- `frontend/` — Next.js client
+- `backend/` - NestJS API
+- `frontend/` - Next.js client
 
 ## Deployment
 
